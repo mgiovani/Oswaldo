@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro - Aluno</title>
+</h:head>
+<h:body>
+    <h1>Aluno</h1>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+        <h:panelGrid columns="2" id="cadastroPanel">
+            <p:outputLabel value="E-mail: " />
+            <p:inputText value="#{alunoBean.aluno.login}" required="true" requiredMessage="Campo Obrigatório!"/>
+            
+            <p:outputLabel value="Senha: " />
+            <p:password value="#{alunoBean.aluno.senha}" required="true" requiredMessage="Campo Obrigatório!"/>
+            
+            <p:outputLabel value="Turma: "/>
+            <p:selectOneMenu value="#{alunoBean.aluno.turma}" required="true" requiredMessage="Campo Obrigatório!" converter="turmaConverter">
+	            <f:selectItem itemValue="#{null}" itemLabel="Selecione um curso"  />
+	            <f:selectItems value="#{turmaBean.listarTodos()}" var="t" itemLabel="#{t.curso.nome} {#{t.dtInicio}}" itemValue="#{t}"/>
+	            <f:ajax execute="combo" render="textbox" />
+            </p:selectOneMenu>
+            
+        </h:panelGrid>
+        
+        <h:commandButton value="Salvar" action="#{alunoBean.salvar()}" update="dtAlunos" />
+        <h:commandButton value="Limpar" action="#{alunoBean.limpar()}" update="input" />
+    </h:form>
+    <hr />
+    <p:growl id="msgs" showDetail="true"/>
+</h:body>
+</html>

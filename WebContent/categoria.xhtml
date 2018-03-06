@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro - Categoria</title>
+</h:head>
+<h:body>
+    <h1>Categorias</h1>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+        <h:panelGrid columns="2" id="cadastroPanel">
+            <p:outputLabel value="Nome: " />
+            <p:inputText value="#{categoriaBean.categoria.nome}" required="true" requiredMessage="Campo Obrigatório!"/>
+            
+            <p:outputLabel value="Curso: "/>
+            <p:selectOneMenu value="#{categoriaBean.categoria.curso}" required="true" requiredMessage="Campo Obrigatório!" converter="cursoConverter">
+	            <f:selectItem itemValue="#{null}" itemLabel="Selecione um curso"  />
+	            <f:selectItems value="#{cursoBean.listarTodos()}" var="c" itemLabel="#{c.nome} {#{c.descricao}}" itemValue="#{c}"/>
+	            <f:ajax execute="combo" render="textbox" />
+            </p:selectOneMenu>
+            
+            
+            <p:outputLabel value="Quantidade de Horas: " />
+            <p:inputNumber value="#{categoriaBean.categoria.qtdMaxHoras}" decimalPlaces="0" required="true" requiredMessage="Campo Obrigatório!"/>
+        </h:panelGrid>
+        
+        <h:commandButton value="Salvar" action="#{categoriaBean.salvar()}" update="dtCategorias" />
+        <h:commandButton value="Limpar" action="#{categoriaBean.limpar()}" update="input" />
+    </h:form>
+    <hr />
+    <h:panelGrid>
+    <h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+	    <p:dataTable id="dtCategorias" value="#{categoriaBean.listarTodos()}" var="c" emptyMessage="Nada encontrado para esta busca." editable="true" >
+	    	<f:facet name="header">
+            Categorias
+        	</f:facet>
+	    	<p:column headerText="ID" filterBy="#{c.id}">
+	    		<p:outputLabel value="#{c.id}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Nome" filterBy="#{c.nome}" filterMatchMode="contains" sortBy="#{c.nome}">
+                <p:outputLabel value="#{c.nome}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Curso" filterBy="#{c.curso.nome}" filterMatchMode="contains" sortBy="#{c.curso.nome}">
+	    		<p:outputLabel value="#{c.curso.nome}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Horas" filterBy="#{c.qtdMaxHoras}" filterMatchMode="exact" sortBy="#{c.qtdMaxHoras}">
+	    		<p:outputLabel value="#{c.qtdMaxHoras}" />
+	    	</p:column>
+	    		
+	    	<p:column style="width:32px">
+            <p:commandButton icon="ui-icon-pencil" action="#{categoriaBean.selecionar(c)}" update="input" />
+            <p:commandButton icon="ui-icon-trash" action="#{categoriaBean.remover(c)}" update="dtCategorias"  onclick="return confirm('Deseja mesmo remover?')"/>
+       		</p:column>
+	    </p:dataTable>
+    </h:form>
+    </h:panelGrid>
+</h:body>
+</html>

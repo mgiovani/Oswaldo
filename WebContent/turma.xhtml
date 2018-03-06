@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro - Turma</title>
+</h:head>
+<h:body>
+    <h1>Turmas</h1>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+        <h:panelGrid columns="2" id="cadastroPanel">
+
+           <p:outputLabel value="Curso: "/>
+            <p:selectOneMenu value="#{categoriaBean.categoria.curso}" required="true" requiredMessage="Campo Obrigatório!" converter="cursoConverter">
+	            <f:selectItem itemValue="#{null}" itemLabel="Selecione um curso"  />
+	            <f:selectItems value="#{cursoBean.listarTodos()}" var="c" itemLabel="#{c.nome} {#{c.descricao}}" itemValue="#{c}"/>
+	            <f:ajax execute="combo" render="textbox" />
+            </p:selectOneMenu>
+            
+            <p:outputLabel value="Inicio: " />
+            <p:calendar id="button" value="#{turmaBean.turma.dtInicio}" showOn="button" required="true" requiredMessage="Campo Obrigatório!"/>
+        </h:panelGrid>
+        
+        <h:commandButton value="Salvar" action="#{turmaBean.salvar()}" update="dtTurmas" />
+        <h:commandButton value="Limpar" action="#{turmaBean.limpar()}" update="input" />
+    </h:form>
+    <hr />
+    <h:panelGrid>
+    <h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+	    <p:dataTable id="dtTurmas" value="#{turmaBean.listarTodos()}" var="c" emptyMessage="Nada encontrado para esta busca." editable="true" >
+	    	<f:facet name="header">
+            Turmas
+        	</f:facet>
+	    	<p:column headerText="ID" filterBy="#{c.id}">
+	    		<p:outputLabel value="#{c.id}" />
+	    	</p:column>
+
+	    	<p:column headerText="Curso" filterBy="#{c.curso.nome}" filterMatchMode="contains" sortBy="#{c.curso.nome}">
+	    		<p:outputLabel value="#{c.curso.nome}" />
+	    	</p:column>	    
+	    	
+	    	<p:column headerText="Inicio" filterBy="#{c.dtInicio}" filterMatchMode="contains" sortBy="#{c.dtInicio}">
+	    		<p:outputLabel value="#{c.dtInicio}" />
+	    	</p:column>	
+	    	<p:column style="width:32px">
+            <p:commandButton icon="ui-icon-pencil" action="#{turmaBean.selecionar(c)}" update="input" />
+            <p:commandButton icon="ui-icon-trash" action="#{turmaBean.remover(c)}" update="dtTurmas"  onclick="return confirm('Deseja mesmo remover?')"/>
+       		</p:column>
+	    </p:dataTable>
+    </h:form>
+    </h:panelGrid>
+</h:body>
+</html>

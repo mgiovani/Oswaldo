@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro - Atividade</title>
+</h:head>
+<h:body>
+    <h1>Atividades</h1>
+    <h3>Você cumpriu um total de #{atividadeBean.somar(categoriaBean.listarTodos())}h.</h3>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+        <h:panelGrid columns="2" id="cadastroPanel">      
+           
+            <p:outputLabel value="Categoria: "/>
+            <p:selectOneMenu value="#{atividadeBean.atividade.categoria}" required="true" requiredMessage="Campo Obrigatório!" converter="categoriaConverter">
+	            <f:selectItem itemValue="#{null}" itemLabel="Selecione uma categoria"  />
+	            <f:selectItems value="#{categoriaBean.listarTodos()}" var="c" itemLabel="#{c.nome} {#{c.curso.nome}}" itemValue="#{c}"/>
+	            <f:ajax execute="combo" render="textbox" />
+            </p:selectOneMenu>
+            
+            <p:outputLabel value="Descrição: " />
+            <p:inputText value="#{atividadeBean.atividade.descricao}" required="true" requiredMessage="Campo Obrigatório!"/>
+      
+            <p:outputLabel value="Horas: " />
+            <p:inputNumber value="#{atividadeBean.atividade.horas}" decimalPlaces="0" required="true" requiredMessage="Campo Obrigatório!"/>
+            
+            <p:outputLabel value="Inicio: " />
+            <p:calendar value="#{atividadeBean.atividade.dtInicio}" showOn="button" required="true" requiredMessage="Campo Obrigatório!"/>
+            
+            <p:outputLabel value="Término: " />
+            <p:calendar value="#{atividadeBean.atividade.dtInicio}" showOn="button" required="true" requiredMessage="Campo Obrigatório!"/>
+        </h:panelGrid>
+        
+        <h:commandButton value="Salvar" action="#{atividadeBean.salvar()}" update="dtAtividades" />
+        <h:commandButton value="Limpar" action="#{atividadeBean.limpar()}" update="input" />
+    </h:form>
+    <hr />
+    <h:panelGrid>
+    <h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+	    <p:dataTable id="dtAtividades" value="#{atividadeBean.listarTodos()}" var="c" emptyMessage="Nada encontrado para esta busca." editable="true" >
+	    	<f:facet name="header">
+            Categorias
+        	</f:facet>
+	    	<p:column headerText="ID" filterBy="#{c.id}">
+	    		<p:outputLabel value="#{c.id}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Descrição" filterBy="#{c.descricao}" filterMatchMode="contains" sortBy="#{c.descricao}">
+                <p:outputLabel value="#{c.descricao}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Categoria" filterBy="#{c.categoria.nome}" filterMatchMode="contains" sortBy="#{c.categoria.nome}">
+                <p:outputLabel value="#{c.categoria.nome}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Horas" filterBy="#{c.horas}" filterMatchMode="exact" sortBy="#{c.horas}">
+	    		<p:outputLabel value="#{c.horas}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Data" filterBy="#{c.dtInicio}" filterMatchMode="contains" sortBy="#{c.dtInicio}">
+                <p:outputLabel value="#{c.dtInicio}" />
+	    	</p:column>
+	    		
+	    	<p:column style="width:32px">
+            <p:commandButton icon="ui-icon-pencil" action="#{atividadeBean.selecionar(c)}" update="input" />
+            <p:commandButton icon="ui-icon-trash" action="#{atividadeBean.remover(c)}" update="dtAtividades"  onclick="return confirm('Deseja mesmo remover?')"/>
+       		</p:column>
+	    </p:dataTable>
+    </h:form>
+    </h:panelGrid>
+</h:body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro - Curso</title>
+</h:head>
+<h:body>
+    <h1>Cursos</h1>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+        <h:panelGrid columns="2" id="cadastroPanel">
+            <p:outputLabel value="Nome: " />
+            <p:inputText value="#{cursoBean.curso.nome}" required="true" requiredMessage="Campo Obrigatório!"/>
+            <p:outputLabel value="Descrição:" />
+            <p:inputText value="#{cursoBean.curso.descricao}" required="true" requiredMessage="Campo Obrigatório!"/>
+            <p:outputLabel value="Duração: " />
+            <p:inputNumber value="#{cursoBean.curso.duracao}"  decimalPlaces="0" required="true" requiredMessage="Campo Obrigatório!"/>
+            <p:outputLabel value="Quantidade de Horas: " />
+            <p:inputNumber value="#{cursoBean.curso.qtdHoras}" decimalPlaces="0" required="true" requiredMessage="Campo Obrigatório!"/>
+        </h:panelGrid>
+        
+        <h:commandButton value="Salvar" action="#{cursoBean.salvar()}" update="dtCursos" />
+        <h:commandButton value="Limpar" action="#{cursoBean.limpar()}" update="input" />
+    </h:form>
+    <hr />
+    <h:panelGrid>
+    <h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+	    <p:dataTable id="dtCursos" value="#{cursoBean.listarTodos()}" var="c" emptyMessage="Nada encontrado para esta busca." editable="true" >
+	    	<f:facet name="header">
+            Cursos
+        	</f:facet>
+	    	<p:column headerText="ID" filterBy="#{c.id}">
+	    		<p:outputLabel value="#{c.id}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Nome" filterBy="#{c.nome}" filterMatchMode="contains" sortBy="#{c.nome}">
+                <p:outputLabel value="#{c.nome}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Descrição" filterBy="#{c.descricao}" filterMatchMode="contains" sortBy="#{c.descricao}">
+	    		<p:outputLabel value="#{c.descricao}" />
+	    	</p:column>
+	    	
+	    	<p:column headerText="Duração" filterBy="#{c.duracao}" filterMatchMode="exact" sortBy="#{c.duracao}">
+	    		<p:outputLabel value="#{c.duracao}"/>
+	    	</p:column>
+	    	
+	    	<p:column headerText="Horas" filterBy="#{c.qtdHoras}" filterMatchMode="exact" sortBy="#{c.qtdHoras}">
+	    		<p:outputLabel value="#{c.qtdHoras}" />
+	    	</p:column>
+	    		
+	    	<p:column style="width:32px">
+            <p:commandButton icon="ui-icon-pencil" action="#{cursoBean.selecionar(c)}" update="input" />
+            <p:commandButton icon="ui-icon-trash" action="#{cursoBean.remover(c)}" update="dtCursos"  onclick="return confirm('Deseja mesmo remover?')"/>
+       		</p:column>
+	    </p:dataTable>
+    </h:form>
+    </h:panelGrid>
+</h:body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Login</title>
+</h:head>
+<h:body>
+    <h1>Login</h1>
+    <hr />
+    <h:form id="input" acceptcharset="UTF-8">
+    <p:growl id="msgs" showDetail="true"/>
+        <h:panelGrid columns="2" id="cadastroPanel">
+            <p:outputLabel value="E-mail: " />
+            <p:inputText value="#{loginBean.usario.login}" required="true" requiredMessage="Campo Obrigatório!"/>
+          <p:outputLabel value="Senha: " />
+            <p:password value="#{loginBean.usario.senha}" required="true" requiredMessage="Campo Obrigatório!"/>
+        </h:panelGrid>
+        
+        <h:commandButton value="Entrar" action="#{loginBean.login()}"/>
+    </h:form>
+    <hr />
+    <h:form>
+    <h:commandLink value="Esqueci a senha" onclick="return alert('Que pena :(')"/>
+    </h:form>
+    
+</h:body>
+</html>
